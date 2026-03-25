@@ -1,0 +1,22 @@
+{% extends "MainApp/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+  {% if form.errors %}
+    <p class="alert alert-danger">Your username and password did not match. Please try again.</p>
+  {% endif %}
+
+  <div class="card col-md-6 offset-md-3">
+    <div class="card-header">Log in to your account</div>
+    <div class="card-body">
+      <form action="{% url 'users:login' %}" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+          <button name="submit" class="btn btn-primary btn-block">Log In</button>
+        {% endbuttons %}
+        <input type="hidden" name="next" value="{% url 'MainApp:index' %}" />
+      </form>
+    </div>
+  </div>
+{% endblock content %}

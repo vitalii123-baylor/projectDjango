@@ -1,0 +1,26 @@
+{% extends 'MainApp/base.html' %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="mb-4 font-weight-bold text-center"><i class="fas fa-brain text-primary mr-2"></i> Clear Your Mind</h2>
+      
+      <div class="card border-0 shadow-sm p-4 mb-4">
+        <div class="card-body">
+          <p class="lead">The "Second Brain" concept suggests that your brain is for having ideas, not for holding them. By documenting your learning journey, you free up mental resources for creativity and deep thinking.</p>
+          
+          <h5 class="mt-4 font-weight-bold text-dark">Why log your learning?</h5>
+          <ul class="list-unstyled mt-3">
+            <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> <strong>Reduce Anxiety:</strong> Getting thoughts out of your head lowers stress levels.</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> <strong>Improve Retention:</strong> The act of writing reinforces memory.</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-success mr-2"></i> <strong>Find Connections:</strong> Seeing your notes helps you connect dots between different topics.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{% url 'MainApp:index' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-5">Back to Home</a>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

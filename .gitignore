@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local configuration file (for secrets)
+.env
+
+# Database
+db.sqlite3
+*.db
+
+# Virtual environment
+djvenv/
+venv/
+env/
+ENV/
+
+# Static files and media
+static/
+media/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

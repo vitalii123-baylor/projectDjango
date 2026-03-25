@@ -1,0 +1,195 @@
+{% load bootstrap4 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Learning Log | Your Personal Knowledge Base</title>
+  
+  {% bootstrap_css %}
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+      color: #343a40;
+    }
+    .navbar {
+      box-shadow: 0 2px 4px rgba(0,0,0,.08);
+      background-color: #ffffff !important;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #007bff !important;
+      letter-spacing: 0.5px;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,.1);
+    }
+    .btn-primary {
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-weight: 500;
+    }
+    .jumbotron {
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 4rem 2rem;
+      margin-bottom: 2rem;
+    }
+    .footer {
+      padding: 3rem 0;
+      color: #6c757d;
+      text-align: center;
+    }
+    /* Стили для иконок в навбаре */
+    .nav-link i {
+      margin-right: 5px;
+    }
+  </style>
+  
+  {% bootstrap_javascript jquery='full' %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    $(document).ready(function(){
+      // Авто-скрытие тостов
+      setTimeout(function() {
+        $(".toast").fadeOut("slow");
+      }, 5000);
+
+      // Всплывающая фишка: Цитата дня (только один раз за сессию в браузере)
+      if (!sessionStorage.getItem('quote_shown')) {
+        const quotes = [
+          "Knowledge is power. – Francis Bacon",
+          "Learning never exhausts the mind. – Leonardo da Vinci",
+          "An investment in knowledge pays the best interest. – Benjamin Franklin",
+          "The expert in anything was once a beginner. – Helen Hayes"
+        ];
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        
+        const quoteHtml = `
+          <div class="toast show shadow-lg" style="position: fixed; bottom: 20px; left: 20px; z-index: 2000;">
+            <div class="toast-header bg-primary text-white">
+              <strong class="mr-auto"><i class="fas fa-lightbulb"></i> Daily Motivation</strong>
+              <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast">&times;</button>
+            </div>
+            <div class="toast-body font-italic">
+              "${randomQuote}"
+            </div>
+          </div>
+        `;
+        $('body').append(quoteHtml);
+        sessionStorage.setItem('quote_shown', 'true');
+        
+        setTimeout(function() {
+          $(".toast").fadeOut("slow");
+        }, 8000);
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <!-- Контейнер для всплывающих уведомлений -->
+  <div id="toast-container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="toast show mb-2" role="alert">
+          <div class="toast-header {% if message.tags == 'success' %}bg-success text-white{% elif message.tags == 'error' %}bg-danger text-white{% else %}bg-info text-white{% endif %}">
+            <strong class="mr-auto"><i class="fas fa-bell"></i> Notification</strong>
+            <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast">&times;</button>
+          </div>
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <nav class="navbar navbar-expand-md navbar-light mb-4 py-3">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'MainApp:index' %}">
+        <i class="fas fa-book-reader mr-2"></i>LEARNING LOG
+      </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'MainApp:topics' %}">
+              <i class="fas fa-list-ul"></i> Topics
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary font-weight-bold" href="{% url 'MainApp:keep_growing' %}">
+              <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+            <li class="nav-item align-self-center mr-3">
+              <span class="text-muted small">Welcome, <strong>{{ user.username }}</strong></span>
+            </li>
+            <li class="nav-item">
+              <form action="{% url 'users:logout' %}" method="post" class="form-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm px-3">
+                  <i class="fas fa-sign-out-alt"></i> Log Out
+                </button>
+              </form>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'users:register' %}">
+                <i class="fas fa-user-plus"></i> Register
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold text-primary" href="{% url 'users:login' %}">
+                <i class="fas fa-sign-in-alt"></i> Log In
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main role="main" class="container pb-5">
+    {% block content %}{% endblock content %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <hr>
+      <p>&copy; 2026 Learning Log Project. Keep growing your mind.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+>
+    </div>
+  </footer>
+
+</body>
+</html>

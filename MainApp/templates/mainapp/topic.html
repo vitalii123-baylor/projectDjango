@@ -1,0 +1,23 @@
+{% extends "MainApp/base.html" %}
+
+{% block content %}
+  <h3 class="mb-3">Topic: {{ topic }}</h3>
+
+  {% for e in entries %}
+    <div class="card mb-3">
+      <div class="card-header d-flex justify-content-between">
+        <small class="text-muted">{{ e.date_added|date:'M d, Y H:i' }}</small>
+        <a href="{% url 'MainApp:edit_entry' e.id %}" class="btn btn-outline-info btn-sm">Edit entry</a>
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ e.text|linebreaks }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <p>No entries have been added for this topic yet.</p>
+  {% endfor %}
+
+  <div class="mt-4">
+    <a href="{% url 'MainApp:new_entry' topic.id %}" class="btn btn-primary">Add new entry</a>
+  </div>
+{% endblock content %}

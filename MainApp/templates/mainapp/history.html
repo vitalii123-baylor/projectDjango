@@ -1,0 +1,37 @@
+{% extends 'MainApp/base.html' %}
+
+{% block content %}
+  <div class="text-center mb-5">
+    <h2 class="font-weight-bold"><i class="fas fa-history text-success mr-2"></i> Your Progress History</h2>
+    <p class="text-muted">Numbers don't lie. Look how much you've accomplished!</p>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-5 mb-4 text-center">
+      <div class="card border-0 shadow-sm bg-primary text-white p-4">
+        <div class="card-body">
+          <h1 class="display-2 font-weight-bold mb-0">{{ topics_count }}</h1>
+          <p class="h4">Topics Created</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-5 mb-4 text-center">
+      <div class="card border-0 shadow-sm bg-success text-white p-4">
+        <div class="card-body">
+          <h1 class="display-2 font-weight-bold mb-0">{{ entries_count }}</h1>
+          <p class="h4">Log Entries Made</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-8 text-center">
+      <div class="alert alert-info border-0 shadow-sm py-4">
+        <h5 class="mb-0">Keep going! Every entry is a step towards mastery.</h5>
+      </div>
+      <a href="{% url 'MainApp:topics' %}" class="btn btn-primary btn-lg mt-3 shadow-sm px-5">View All Topics</a>
+    </div>
+  </div>
+{% endblock content %}
