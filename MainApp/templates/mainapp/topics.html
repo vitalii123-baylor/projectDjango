@@ -1,36 +1,118 @@
 {% extends "MainApp/base.html" %}
 
 {% block content %}
-  <div class="d-flex justify-content-between align-items-center mb-5">
-    <h2 class="font-weight-bold"><i class="fas fa-layer-group text-primary mr-2"></i> Your Topics</h2>
-    <a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary shadow-sm">
-      <i class="fas fa-plus mr-2"></i> Add New Topic
+<style>
+  .topic-card {
+    border-radius: 15px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+  }
+  .topic-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  }
+  .topic-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    background: rgba(0,123,255,0.1);
+    color: #007bff;
+  }
+  .badge-custom {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .search-container {
+    max-width: 500px;
+  }
+</style>
+
+<div class="row mb-5 align-items-center">
+  <div class="col-lg-6">
+    <h1 class="font-weight-bold display-4 text-dark mb-2">My Topics</h1>
+    <p class="text-muted lead">Manage and track your learning journey across different subjects.</p>
+  </div>
+  <div class="col-lg-6 text-lg-right mt-3 mt-lg-0">
+    <a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary btn-lg shadow">
+      <i class="fas fa-plus-circle mr-2"></i> Create New Topic
     </a>
   </div>
+</div>
 
-  <div class="row">
-    {% for topic in all_topics %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 border-0">
-          <div class="card-body d-flex flex-column">
-            <h5 class="card-title font-weight-bold text-dark mb-3">{{ topic }}</h5>
-            <div class="mt-auto">
-              <a href="{% url 'MainApp:topic' topic.id %}" class="btn btn-outline-primary btn-block btn-sm rounded-pill mt-3">
-                View Log Entries <i class="fas fa-chevron-right ml-1"></i>
-              </a>
-            </div>
-          </div>
+<div class="row mb-4">
+  <div class="col-md-12">
+    <div class="search-container">
+      <div class="input-group input-group-lg shadow-sm">
+        <div class="input-group-prepend">
+          <span class="input-group-text bg-white border-right-0"><i class="fas fa-search text-muted"></i></span>
         </div>
+        <input type="text" id="topicSearch" class="form-control border-left-0" placeholder="Search your topics...">
       </div>
-    {% empty %}
-      <div class="col-12 text-center py-5">
-        <div class="alert alert-light border shadow-sm p-5">
-          <i class="fas fa-clipboard fa-4x text-muted mb-3"></i>
-          <h4 class="text-muted">No topics have been added yet.</h4>
-          <p class="text-muted">Start by creating your first topic to track your learning journey!</p>
-          <a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary mt-3">Add Topic Now</a>
-        </div>
-      </div>
-    {% endfor %}
+    </div>
   </div>
+</div>
+
+<div class="row" id="topicsGrid">
+  {% for topic in all_topics %}
+    <div class="col-lg-4 col-md-6 mb-4 topic-item">
+      <div class="card h-100 topic-card p-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div class="topic-icon">
+            <i class="fas fa-bookmark"></i>
+          </div>
+          <span class="badge badge-light badge-custom border">
+            <i class="fas fa-pen-nib mr-1"></i> {{ topic.entries_count }} entries
+          </span>
+        </div>
+        
+        <h4 class="card-title font-weight-bold text-dark mb-2 topic-name">{{ topic.text }}</h4>
+        <p class="small text-muted mb-4">
+          <i class="far fa-calendar-alt mr-1"></i> Added: {{ topic.date_added|date:"M d, Y" }}
+        </p>
+        
+        <div class="mt-auto">
+          <a href="{% url 'MainApp:topic' topic.id %}" class="btn btn-outline-primary btn-block rounded-pill">
+            View Details <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12 text-center py-5">
+      <div class="empty-state">
+        <img src="https://img.icons8.com/clouds/200/000000/empty-box.png" alt="No topics" class="mb-4">
+        <h3 class="font-weight-bold">Your library is empty</h3>
+        <p class="text-muted mb-4">Every expert was once a beginner. Start by adding your first topic today!</p>
+        <a href="{% url 'MainApp:new_topic' %}" class="btn btn-primary btn-lg px-5 shadow-sm">Get Started</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Simple client-side search functionality
+  document.getElementById('topicSearch').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let topics = document.getElementsByClassName('topic-item');
+    
+    Array.from(topics).forEach(function(item) {
+      let name = item.querySelector('.topic-name').textContent.toLowerCase();
+      if (name.includes(filter)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+</script>
+
 {% endblock content %}

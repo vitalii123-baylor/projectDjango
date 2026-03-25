@@ -12,7 +12,7 @@ def index(request):
 
 @login_required
 def topics(request):
-    topics = Topic.objects.filter(owner=request.user).order_by('date_added')
+    topics = Topic.objects.filter(owner=request.user).annotate(entries_count=Count('entry')).order_by('-date_added')
     context = {'all_topics': topics}
     return render(request, 'MainApp/topics.html', context)
 

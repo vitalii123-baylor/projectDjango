@@ -2,14 +2,33 @@
 {% load bootstrap4 %}
 
 {% block content %}
-  <h3><a href="{% url 'MainApp:topic' topic.id %}">{{ topic }}</a></h3>
-  <h4 class="mb-4">Add a new entry:</h4>
+<div class="row justify-content-center pt-4">
+  <div class="col-lg-8">
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb bg-transparent p-0">
+        <li class="breadcrumb-item"><a href="{% url 'MainApp:topics' %}">My Topics</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'MainApp:topic' topic.id %}">{{ topic.text }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New Entry</li>
+      </ol>
+    </nav>
 
-  <form action="{% url 'MainApp:new_entry' topic.id %}" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-      <button name="submit" class="btn btn-primary">Add entry</button>
-    {% endbuttons %}
-  </form>
+    <div class="card border-0 shadow-lg p-3" style="border-radius: 20px;">
+      <div class="card-body">
+        <h2 class="font-weight-bold text-dark mb-4">
+          <i class="fas fa-edit text-primary mr-2"></i> Add Entry to <span class="text-primary">{{ topic.text }}</span>
+        </h2>
+        <p class="text-muted mb-5 lead">What did you learn today? Record your progress below.</p>
+        
+        <form action="{% url 'MainApp:new_entry' topic.id %}" method="post" class="form">
+          {% csrf_token %}
+          {% bootstrap_form form layout='vertical' %}
+          <div class="mt-5 d-flex align-items-center">
+            <button name="submit" class="btn btn-primary btn-lg shadow rounded-pill px-5 mr-3">Add Entry</button>
+            <a href="{% url 'MainApp:topic' topic.id %}" class="btn btn-outline-secondary btn-lg rounded-pill px-5">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
