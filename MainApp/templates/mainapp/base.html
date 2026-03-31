@@ -100,6 +100,24 @@
     #theme-toggle:hover {
       transform: rotate(20deg);
     }
+    /* Позиционирование уведомлений */
+    #toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      width: 300px;
+    }
+    .toast {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 1 !important;
+    }
+    .toast-body {
+      background-color: var(--card-bg);
+    }
     /* Dark mode adjustments for common elements */
     .dark-mode .text-muted { color: #a0a0a0 !important; }
     .dark-mode hr { border-top-color: var(--border-color); }
